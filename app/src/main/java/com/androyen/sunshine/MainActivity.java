@@ -10,6 +10,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.os.Build;
+import android.widget.ArrayAdapter;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -70,12 +71,17 @@ public class MainActivity extends ActionBarActivity {
                     "Thurs - Asteroids - 75/65",
                     "Fri - Heavy Rain - 65/56",
                     "Sat - HELP TRAPPED IN WEATHERSTATION - 60/51",
-                    "Sun - SUnny - 80/68"
+                    "Sun - Sunny - 80/68"
             };
 
             List<String> weekForecast = new ArrayList<String> (
                     Arrays.asList(forecastArray));
-    
+
+            //Initialize ArrayAdapter
+            ArrayAdapter<String> mForecastAdapter = new ArrayAdapter<String>(getActivity(), R.layout.list_item_forecast, R.id.list_item_forecast_textview, weekForecast);
+
+
+
             return rootView;
         }
     }
