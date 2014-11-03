@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
@@ -79,6 +80,23 @@ public  class ForecastFragment extends Fragment {
 
         getActivity().getMenuInflater().inflate(R.menu.forecastfragment, menu);
     }
+
+    //Respond to menu options
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        //Handle the item selected
+        switch (item.getItemId()) {
+
+            case R.id.action_refresh:
+                //Fetch data
+                FetchWeatherTask refreshWeather = new FetchWeatherTask();
+                refreshWeather.execute();
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
 
 
     //Inner class for AsyncTask to fetch weather data
