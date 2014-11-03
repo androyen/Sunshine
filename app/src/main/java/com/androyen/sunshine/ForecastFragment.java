@@ -82,7 +82,7 @@ public  class ForecastFragment extends Fragment {
                 //Get weather data from list item that was clicked
                 String forecast = mForecastAdapter.getItem(position);
 
-                Intent intent = new Intent(getActivity(), DetailFragment.class);
+                Intent intent = new Intent(getActivity(), DetailActivity.class);
                 intent.putExtra(Intent.EXTRA_TEXT, forecast);
                 startActivity(intent);
             }
