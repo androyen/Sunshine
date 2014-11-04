@@ -21,5 +21,6 @@
 
     </string-array>
     <string name="pref_default_value_temp">Metric</string>
+    <string name="menu_map_location_title">Map Location</string>
 
 </resources>

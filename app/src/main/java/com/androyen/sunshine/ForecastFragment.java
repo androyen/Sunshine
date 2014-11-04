@@ -42,6 +42,8 @@ import java.util.List;
  */
 public  class ForecastFragment extends Fragment {
 
+    private static final String TAG = ForecastFragment.class.getSimpleName();
+
     private ArrayAdapter<String> mForecastAdapter;
 
     public ForecastFragment() {
@@ -108,7 +110,6 @@ public  class ForecastFragment extends Fragment {
 
                 return true;
 
-
         }
         return super.onOptionsItemSelected(item);
     }
@@ -118,6 +119,23 @@ public  class ForecastFragment extends Fragment {
     public void onStart() {
         super.onStart();
         updateWeather();
+    }
+
+    private void showMap() {
+        //Grab the zip code location from SharedPreferences
+        //Use the zip code to open Maps app
+        SharedPreferences zipCodeLocation = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        String zipcode = zipCodeLocation.getString(getString(R.string.pref_location_key), getString(R.string.pref_default_value_zipcode));
+
+        Uri geoLocation = Uri.parse("geo::0,0?q=" + zipcode);
+        Intent mapIntent = new Intent(Intent.ACTION_VIEW);
+        mapIntent.setData(geoLocation);
+
+//        //Check to see if there are apps to handle this implicit intent to open Maps
+//        if(mapIntent.resolveActivity(getPackageManager() != null)) {
+//            startActivity(mapIntent);
+//        }
+
     }
 
     private void updateWeather() {
@@ -186,9 +204,6 @@ public  class ForecastFragment extends Fragment {
 
                 //Convert URI to URL
                 URL weatherUrl = new URL(buildUri.toString());
-
-                Log.v(TAG, "Value of params[0] is " + params[0]);
-                Log.v(TAG, "Build Url " + buildUri);
 
 
 
@@ -295,8 +310,7 @@ public  class ForecastFragment extends Fragment {
                 low = (low * 1.8) + 32;
             }
 
-            Log.v(TAG,"value of tempUnitType " + tempUnitType);
-            Log.v(TAG, "value of high is " + high);
+
 
 
 

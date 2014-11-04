@@ -1,6 +1,9 @@
 package com.androyen.sunshine;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.net.Uri;
+import android.preference.PreferenceManager;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
@@ -56,7 +59,32 @@ public class MainActivity extends ActionBarActivity {
             startActivity(intent);
             return true;
         }
+        else if (id == R.id.action_map_location) {
+
+            showMap();
+            return true;
+        }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void showMap() {
+
+        //Get SharedPreferences of stored zipcode and open Implicit Intent for Maps
+        SharedPreferences location = PreferenceManager.getDefaultSharedPreferences(this);
+        String zipcode = location.getString(getString(R.string.pref_location_key), getString(R.string.pref_default_value_zipcode));
+
+        //Create URI location for zipcode
+        Uri geolocation = Uri.parse("geo:0,0?q=" + zipcode);
+
+        //Use implicit intent to open maps app with the zipcode
+        Intent mapIntent = new Intent(Intent.ACTION_VIEW);
+        mapIntent.setData(geolocation);
+
+        //Check to see if resources for the app is there
+        if (mapIntent.resolveActivity(getPackageManager()) != null) {
+            startActivity(mapIntent);
+        }
+
     }
 
 
