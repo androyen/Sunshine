@@ -1,20 +1,18 @@
 package com.androyen.sunshine;
 
 import android.content.Intent;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.ActionBarActivity;
-import android.support.v7.app.ActionBar;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
+import android.support.v7.widget.ShareActionProvider;
 import android.view.LayoutInflater;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.os.Build;
-import android.widget.ShareActionProvider;
 import android.widget.TextView;
-
-import com.androyen.sunshine.R;
 
 public class DetailActivity extends ActionBarActivity {
 
@@ -25,7 +23,7 @@ public class DetailActivity extends ActionBarActivity {
         setContentView(R.layout.activity_detail);
         if (savedInstanceState == null) {
             getSupportFragmentManager().beginTransaction()
-                    .add(R.id.container, new PlaceholderFragment())
+                    .add(R.id.container, new DetailFragment())
                     .commit();
         }
     }
@@ -57,12 +55,20 @@ public class DetailActivity extends ActionBarActivity {
     /**
      * A placeholder fragment containing a simple view.
      */
-    public static class PlaceholderFragment extends Fragment {
+    public static class DetailFragment extends Fragment {
 
+        //Constant for #SunshineApp
+        private final String HASHTAG_SUNSHINE = "#SunshineApp";
+
+        private String mWeatherForecastString;
         private TextView forecastTextView;
-        private ShareActionProvider shareActionProvider;
+        private ShareActionProvider mShareActionProvider;
 
-        public PlaceholderFragment() {
+
+
+        //Need to use menu item callback methods in this fragment
+        public DetailFragment() {
+            setHasOptionsMenu(true);
         }
 
         @Override
@@ -72,14 +78,45 @@ public class DetailActivity extends ActionBarActivity {
             Intent intent = getActivity().getIntent();
 
             if (intent != null && intent.hasExtra(Intent.EXTRA_TEXT)) {
-                String forecast = intent.getStringExtra(Intent.EXTRA_TEXT);
+                mWeatherForecastString = intent.getStringExtra(Intent.EXTRA_TEXT);
 
                 forecastTextView = (TextView) rootView.findViewById(R.id.forecastTextView);
-                forecastTextView.setText(forecast);
+                forecastTextView.setText(mWeatherForecastString);
 
 
             }
             return rootView;
+        }
+
+        @Override
+        public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+            //Inflate menu resource
+            inflater.inflate(R.menu.detailfragment, menu);
+
+            //Locate MenuItem with ShareActionProvider
+            MenuItem item = menu.findItem(R.id.menu_share_action_provider);
+
+            //Fetch and store ShareActionProvider
+            mShareActionProvider = (ShareActionProvider) MenuItemCompat.getActionProvider(item);
+
+            //Start the sharing intent
+            //Null check ShareActionProvider
+            if (mShareActionProvider != null) {
+                mShareActionProvider.setShareIntent(sharingIntent());
+            }
+
+
+        }
+
+        //Helper method for sharing Intent
+        private Intent sharingIntent() {
+            Intent shareIntent = new Intent(Intent.ACTION_SEND);
+            shareIntent.setType("text/plain");
+            shareIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET); //Prevent activity we are sharing to to be place into back stack
+            //Send the forecast message in ShareActionProvider
+            shareIntent.putExtra(Intent.EXTRA_TEXT, mWeatherForecastString + " " + HASHTAG_SUNSHINE);
+
+            return shareIntent;
         }
     }
 }
