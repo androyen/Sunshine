@@ -11,6 +11,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.os.Build;
+import android.widget.ShareActionProvider;
 import android.widget.TextView;
 
 import com.androyen.sunshine.R;
@@ -59,6 +60,7 @@ public class DetailActivity extends ActionBarActivity {
     public static class PlaceholderFragment extends Fragment {
 
         private TextView forecastTextView;
+        private ShareActionProvider shareActionProvider;
 
         public PlaceholderFragment() {
         }
@@ -74,6 +76,7 @@ public class DetailActivity extends ActionBarActivity {
 
                 forecastTextView = (TextView) rootView.findViewById(R.id.forecastTextView);
                 forecastTextView.setText(forecast);
+
 
             }
             return rootView;
