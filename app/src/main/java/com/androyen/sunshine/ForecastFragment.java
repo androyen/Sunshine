@@ -128,7 +128,6 @@ public  class ForecastFragment extends Fragment {
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(getActivity());
         String zipCode = settings.getString(getString(R.string.pref_location_key), getString(R.string.pref_default_value_zipcode));
 
-
         refreshWeather.execute(zipCode);
     }
 
@@ -279,6 +278,29 @@ public  class ForecastFragment extends Fragment {
          * Prepare the weather high/lows for presentation.
          */
         private String formatHighLows(double high, double low) {
+
+            //Get the SharedPreferences and convert it from Metric and Imperial
+            SharedPreferences temperatureSettings = PreferenceManager.getDefaultSharedPreferences(getActivity());
+            String tempUnitType = temperatureSettings.getString(getString(R.string.pref_temperature_key), getString(R.string.pref_default_value_temp));
+
+            if (tempUnitType.contains(getString(R.string.pref_default_value_temp))){
+
+                //Do nothing
+
+            }
+            else {
+
+                //convert Celcius to Fahrenheit
+                high = (high * 1.8) + 32;
+                low = (low * 1.8) + 32;
+            }
+
+            Log.v(TAG,"value of tempUnitType " + tempUnitType);
+            Log.v(TAG, "value of high is " + high);
+
+
+
+
             // For presentation, assume the user doesn't care about tenths of a degree.
             long roundedHigh = Math.round(high);
             long roundedLow = Math.round(low);

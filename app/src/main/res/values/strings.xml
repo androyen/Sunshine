@@ -13,5 +13,13 @@
     <string name="pref_location_label" translatable="false">Location</string>
     <string name="pref_location_key" translatable="false">location</string>
     <string name="pref_default_value_zipcode">73132</string>
+    <string name="pref_temperature_label" translatable="false">Temperature Units</string>
+    <string name="pref_temperature_key" translatable="false">temperature</string>
+    <string-array name="array_temp_units">
+        <item>Metric</item>
+        <item>Imperial</item>
+
+    </string-array>
+    <string name="pref_default_value_temp">Metric</string>
 
 </resources>
