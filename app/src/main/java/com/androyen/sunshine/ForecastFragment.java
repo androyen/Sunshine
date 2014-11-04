@@ -58,22 +58,12 @@ public  class ForecastFragment extends Fragment {
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_main, container, false);
 
-        //Create array list of strings for forecast data
-        String[] forecastArray = {
-                "Today - Sunny - 88/63",
-                "Tomorrow - Foggy - 70/40",
-                "Weds - Cloudy - 72/63",
-                "Thurs - Asteroids - 75/65",
-                "Fri - Heavy Rain - 65/56",
-                "Sat - HELP TRAPPED IN WEATHERSTATION - 60/51",
-                "Sun - Sunny - 80/68"
-        };
 
-        List<String> weekForecast = new ArrayList<String>(
-                Arrays.asList(forecastArray));
 
-        //Initialize ArrayAdapter
-        mForecastAdapter = new ArrayAdapter<String>(getActivity(), R.layout.list_item_forecast, R.id.list_item_forecast_textview, weekForecast);
+
+
+        //Initialize ArrayAdapter   Use an empty ArrayList. Refactored to remove dummy data
+        mForecastAdapter = new ArrayAdapter<String>(getActivity(), R.layout.list_item_forecast, R.id.list_item_forecast_textview, new ArrayList<String>());
         ListView listView = (ListView)rootView.findViewById(R.id.listView_forecast);
         listView.setAdapter(mForecastAdapter);
 
@@ -114,15 +104,8 @@ public  class ForecastFragment extends Fragment {
         switch (id) {
 
             case R.id.action_refresh:
-                //Fetch data
-                FetchWeatherTask refreshWeather = new FetchWeatherTask();
+                updateWeather();
 
-                //Get the SharedPreferences zipcode and store it in the AsyncTask param
-                SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(getActivity());
-                String zipCode = settings.getString(getString(R.string.pref_location_key), getString(R.string.pref_default_value_zipcode));
-
-
-                refreshWeather.execute(zipCode);
                 return true;
 
 
@@ -130,6 +113,24 @@ public  class ForecastFragment extends Fragment {
         return super.onOptionsItemSelected(item);
     }
 
+    //Overriding onStart so that the updated weather data appears besides dummy data
+    @Override
+    public void onStart() {
+        super.onStart();
+        updateWeather();
+    }
+
+    private void updateWeather() {
+        //Fetch data
+        FetchWeatherTask refreshWeather = new FetchWeatherTask();
+
+        //Get the SharedPreferences zipcode and store it in the AsyncTask param
+        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        String zipCode = settings.getString(getString(R.string.pref_location_key), getString(R.string.pref_default_value_zipcode));
+
+
+        refreshWeather.execute(zipCode);
+    }
 
 
     //Inner class for AsyncTask to fetch weather data
