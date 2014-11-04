@@ -2,9 +2,11 @@ package com.androyen.sunshine;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -114,7 +116,13 @@ public  class ForecastFragment extends Fragment {
             case R.id.action_refresh:
                 //Fetch data
                 FetchWeatherTask refreshWeather = new FetchWeatherTask();
-                refreshWeather.execute("01874");
+
+                //Get the SharedPreferences zipcode and store it in the AsyncTask param
+                SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(getActivity());
+                String zipCode = settings.getString(getString(R.string.pref_location_key), getString(R.string.pref_default_value_zipcode));
+
+
+                refreshWeather.execute(zipCode);
                 return true;
 
 
@@ -179,6 +187,7 @@ public  class ForecastFragment extends Fragment {
                 //Convert URI to URL
                 URL weatherUrl = new URL(buildUri.toString());
 
+                Log.v(TAG, "Value of params[0] is " + params[0]);
                 Log.v(TAG, "Build Url " + buildUri);
 
 
